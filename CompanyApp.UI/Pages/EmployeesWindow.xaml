@@ -5,12 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CompanyApp.UI.Pages"
         xmlns:vms="clr-namespace:CompanyApp.UI.ViewModels"
+        xmlns:cmds="clr-namespace:CompanyApp.UI.Commands"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="600" Width="1200"
         FontSize="16">
     <Window.DataContext>
         <vms:EmployeesWindowViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <cmds:CloseApplicationCommand x:Key="CloseAppCommand" />
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CloseApplicationCommand}"/>
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -24,6 +31,18 @@
         <Menu Grid.Row="0" FontSize="16">
             <MenuItem Header="Файл">
                 <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>
+                <MenuItem Header="Выход команда напрямую">
+                    <MenuItem.Command>
+                        <cmds:CloseApplicationCommand/>
+                    </MenuItem.Command>
+                </MenuItem>
+                <MenuItem Header="Выход по событию мыши">
+                    <MenuItem.InputBindings>
+                        <MouseBinding Command="{Binding CloseApplicationCommand}"
+                                      MouseAction="RightClick" />
+                    </MenuItem.InputBindings>
+                </MenuItem>
+                <MenuItem Header="Выход команда из статич. ресурса" Command="{StaticResource CloseAppCommand}"/>
             </MenuItem>
             <MenuItem Header="Помощь"></MenuItem>
         </Menu>
