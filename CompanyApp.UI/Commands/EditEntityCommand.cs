@@ -4,23 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CompanyApp.UI.Commands
 {
     public class EditEntityCommand : CommandBase
     {
-        public override bool CanExecute(object? parameter) => (parameter is Employee || parameter is Department || parameter is Order);
+        public override bool CanExecute(object? parameter) => CheckParameter(parameter);
 
-        public override void Execute(object? parameter)
+        public override void Execute(object? parameter) =>
+            OpenWindow(parameter);
+
+        private void OpenWindow(object? parameter)
         {
-            if (parameter is Employee employee)
-                employee.FirstName = "Pink";
-
-            else if (parameter is Department department)
-                department.Name = "NewDepartmentName";
-
-            else if (parameter is Order order)
-                order.Name = "NewOrderName";
+            Window win = new Pages.Window1(parameter);
+            win.Topmost = true;
+            win.Show();
         }
+
+        private bool CheckParameter(object? parameter) =>
+            (parameter is not null) && (parameter is Employee || parameter is Department || parameter is Order);
     }
 }
