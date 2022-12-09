@@ -6,6 +6,7 @@ using CompanyApp.UI.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,7 +20,7 @@ namespace CompanyApp.UI.ViewModels
         public IEnumerable<Employee> Employees { get; } = new List<Employee>();
 
         public EmployeesWindowViewModel()
-        {
+        {            
             try
             {
                 dataRepo = new EmployeeRepo(DbContextConfigurationAndCreationHelpers.GetContext());
@@ -31,8 +32,14 @@ namespace CompanyApp.UI.ViewModels
             }
         }
 
-        private string _title;
-
+        #region Title : string - Заголовок окна
+        /// <summary>
+        /// Заголовок окна
+        /// </summary>
+        private string _title = "Заголовок окна";
+        /// <summary>
+        /// Заголовок окна
+        /// </summary>
         public string Title
         {
             get { return _title; }
@@ -44,9 +51,22 @@ namespace CompanyApp.UI.ViewModels
                 OnPropertyChanged();
             }
         }
+        #endregion
 
+        #region Commands
 
+        #region EditEntityCommand
         private ICommand? _editEntityCommand = null;
         public ICommand EditEntityCommand => _editEntityCommand ?? new EditEntityCommand();
+        #endregion
+
+        #region CloseApplicationCommand
+        public RelayCommand CloseApplicationCommand => 
+            new RelayCommand(() => Application.Current.Shutdown(), () => true);
+
+        #endregion
+
+        #endregion
+
     }
 }

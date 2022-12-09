@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CompanyApp.UI.Pages"
         xmlns:vms="clr-namespace:CompanyApp.UI.ViewModels"
         mc:Ignorable="d"
-        Title="Список всех сотрудников" Height="600" Width="1200"
+        Title="{Binding Title}" Height="600" Width="1200"
         FontSize="16">
     <Window.DataContext>
         <vms:EmployeesWindowViewModel />
@@ -23,7 +23,7 @@
 
         <Menu Grid.Row="0" FontSize="16">
             <MenuItem Header="Файл">
-                <MenuItem Header="Выход"/>
+                <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>
             </MenuItem>
             <MenuItem Header="Помощь"></MenuItem>
         </Menu>
