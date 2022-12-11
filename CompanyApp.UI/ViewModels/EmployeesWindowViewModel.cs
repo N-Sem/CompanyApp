@@ -1,11 +1,17 @@
-﻿using CompanyApp.Dal.Repo;
+﻿using CompanyApp.Dal.EfStructures;
+using CompanyApp.Dal.Repo;
 using CompanyApp.Dal.Repo.Interfaces;
 using CompanyApp.Models.Entities;
 using CompanyApp.UI.Commands;
+using CompanyApp.UI.Pages;
+using CompanyApp.UI.Services.ShareEntity;
 using CompanyApp.UI.ViewModels.Base;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +24,16 @@ namespace CompanyApp.UI.ViewModels
     {
         private IEmployeeRepo? dataRepo;
         public IEnumerable<Employee> Employees { get; } = new List<Employee>();
+        private ISharedEntity<int?> employeeBrocker;
 
-        public EmployeesWindowViewModel()
-        {            
+        public EmployeesWindowViewModel(ISharedEntity<int?> sharedEmployeeBrocker, IEmployeeRepo repo)
+        {
+            employeeBrocker = sharedEmployeeBrocker;
+            dataRepo = repo;
+
             try
             {
-                dataRepo = new EmployeeRepo(DbContextConfigurationAndCreationHelpers.GetContext());
-                Employees = dataRepo.GetAll().ToList();
+                Employees = dataRepo.GetAllAsNoTracking().ToList();
             }
             catch (Exception ex)
             {
@@ -36,7 +45,7 @@ namespace CompanyApp.UI.ViewModels
         /// <summary>
         /// Заголовок окна
         /// </summary>
-        private string _title = "Заголовок окна";
+        private string _title = "Список сотрудников";
         /// <summary>
         /// Заголовок окна
         /// </summary>
@@ -55,15 +64,29 @@ namespace CompanyApp.UI.ViewModels
 
         #region Commands
 
-        #region EditEntityCommand
-        private ICommand? _editEntityCommand = null;
-        public ICommand EditEntityCommand => _editEntityCommand ?? new EditEntityCommand();
+        #region EditEmployeeCommand
+        public RelayCommand EditEmployeeCommand =>
+        new RelayCommand<int?>(
+            (parameter) =>
+            {
+                employeeBrocker.SetEntityToEdit((int?)parameter);
+                Window win = new Pages.EditEmployeeWindow();
+                win.Show();
+            },
+            (parameter) => parameter is not null
+            );
         #endregion
 
-        #region CloseApplicationCommand
-        public RelayCommand CloseApplicationCommand => 
-            new RelayCommand(() => Application.Current.Shutdown(), () => true);
-
+        #region NewEmployeeCommand
+        public RelayCommand NewEmployeeCommand =>
+        new RelayCommand(
+            () =>
+            {
+                Window win = new Pages.EditEmployeeWindow();
+                win.Show();
+            },
+            () => true
+            );
         #endregion
 
         #endregion

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CompanyApp.UI.Commands
+namespace CompanyApp.UI.Services.ShareEntity
 {
-    public class ShowOtherWindowCommand
+    public class SharedNullableIntegerId : BaseSharedEntity<int?>
     {
     }
 }

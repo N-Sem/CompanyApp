@@ -13,11 +13,11 @@ namespace CompanyApp.UI.Commands
         public override bool CanExecute(object? parameter) => CheckParameter(parameter);
 
         public override void Execute(object? parameter) =>
-            OpenWindow(parameter);
+            OpenEditEmployeeWindow(parameter);
 
-        private void OpenWindow(object? parameter)
+        private void OpenEditEmployeeWindow(object? parameter)
         {
-            Window win = new Pages.Window1(parameter);
+            Window win = new Pages.EditEmployeeWindow();
             win.Topmost = true;
             win.Show();
         }

@@ -103,6 +103,8 @@ namespace CompanyApp.Dal.Repo.Base
 
         public virtual IEnumerable<T> GetAll() => Table;
 
+        public virtual IEnumerable<T> GetAllAsNoTracking() => Table.AsNoTrackingWithIdentityResolution();
+
         public virtual IEnumerable<T> GetAllIgnoreQueryFilters() => Table.IgnoreQueryFilters();
 
         public int SaveChanges()

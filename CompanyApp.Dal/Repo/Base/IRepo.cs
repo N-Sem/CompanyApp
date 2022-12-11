@@ -19,6 +19,7 @@ namespace CompanyApp.Dal.Repo.Base
         T? FindAsNoTracking(int id);
         T? FindIgnoreQueryFilters(int id);
         IEnumerable<T> GetAll();
+        IEnumerable<T> GetAllAsNoTracking();
         IEnumerable<T> GetAllIgnoreQueryFilters();
         int SaveChanges();
     }

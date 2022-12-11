@@ -6,18 +6,10 @@
         xmlns:local="clr-namespace:CompanyApp.UI.Pages"
         xmlns:vms="clr-namespace:CompanyApp.UI.ViewModels"
         xmlns:cmds="clr-namespace:CompanyApp.UI.Commands"
+        DataContext="{Binding EmployeesWindowViewModel, Source={StaticResource VMS}}"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="600" Width="1200"
         FontSize="16">
-    <Window.DataContext>
-        <vms:EmployeesWindowViewModel />
-    </Window.DataContext>
-    <Window.Resources>
-        <cmds:CloseApplicationCommand x:Key="CloseAppCommand" />
-    </Window.Resources>
-    <Window.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CloseApplicationCommand}"/>
-    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -30,26 +22,18 @@
 
         <Menu Grid.Row="0" FontSize="16">
             <MenuItem Header="Файл">
-                <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"/>
-                <MenuItem Header="Выход команда напрямую">
+                <MenuItem Header="Выход">
                     <MenuItem.Command>
                         <cmds:CloseApplicationCommand/>
                     </MenuItem.Command>
                 </MenuItem>
-                <MenuItem Header="Выход по событию мыши">
-                    <MenuItem.InputBindings>
-                        <MouseBinding Command="{Binding CloseApplicationCommand}"
-                                      MouseAction="RightClick" />
-                    </MenuItem.InputBindings>
-                </MenuItem>
-                <MenuItem Header="Выход команда из статич. ресурса" Command="{StaticResource CloseAppCommand}"/>
             </MenuItem>
             <MenuItem Header="Помощь"></MenuItem>
         </Menu>
-        
+
         <Label Grid.Row="1" Content="Сотрудники компании" FontSize="16" FontWeight="Bold"/>
 
-        <DataGrid x:Name="ItemsGrig" ItemsSource="{Binding Employees}" AutoGenerateColumns="False" IsReadOnly="True" Grid.Row="2" FontSize="16" Margin="0" Grid.ColumnSpan="2">
+        <DataGrid x:Name="ItemsGrig" ItemsSource="{Binding Path=Employees}" AutoGenerateColumns="False" IsReadOnly="True" Grid.Row="2" FontSize="16" Margin="0" Grid.ColumnSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Path=Id}" Width="50" />
                 <DataGridTextColumn Binding="{Binding Path=FirstName}" Header="Имя" Width="150" />
@@ -62,11 +46,20 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button x:Name="btnChangeColor" Content="Редактировать запись" Grid.Row="3" FontSize="16" 
+        <StackPanel Orientation="Horizontal" Grid.Row="3">
+            <Button x:Name="btnEditEntity" Content="Редактировать запись" Grid.Row="3" FontSize="16" 
                         Margin="5" Padding="5" Width="200"
-                        Command="{Binding Path=DataContext.EditEntityCommand,
+                        Command="{Binding Path=DataContext.EditEmployeeCommand,
+                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
+                        CommandParameter="{Binding ElementName=ItemsGrig, Path=SelectedItem.Id}"/>
+
+
+            <Button x:Name="btnAddEntity" Content="Новая запись" Grid.Row="3" FontSize="16" 
+                        Margin="5" Padding="5" Width="200"
+                        Command="{Binding Path=DataContext.NewEmployeeCommand,
                     RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}}"
                         CommandParameter="{Binding ElementName=ItemsGrig, Path=SelectedItem}"/>
+        </StackPanel>      
 
         <StatusBar Grid.Row="5">
             <StatusBarItem>

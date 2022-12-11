@@ -26,6 +26,13 @@ namespace CompanyApp.Dal.Repo
             .Include(e => e.Orders)
             .OrderBy(e => e.Id);
 
+        public override IEnumerable<Employee> GetAllAsNoTracking() =>
+            Table
+            .Include(e => e.DepartmentNavigation)
+            .Include(e => e.Orders)
+            .OrderBy(e => e.Id)
+            .AsNoTrackingWithIdentityResolution();
+
         public IEnumerable<Employee> GetAllByDepartment(int departmentId) =>
             Table
             .Where(e => e.DepartmentId == departmentId)
