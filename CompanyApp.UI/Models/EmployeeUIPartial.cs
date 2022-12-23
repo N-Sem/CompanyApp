@@ -1,12 +1,6 @@
-﻿using CompanyApp.Models.Base;
-using CompanyApp.UI.Models.Base;
+﻿using CompanyApp.UI.Models.Base;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompanyApp.UI.Models
 {
@@ -23,20 +17,21 @@ namespace CompanyApp.UI.Models
                 {
                     AddErrors(columnName, errorsFromAnnotations);
                 }
-                var valueLength = ((string?)typeof(EmployeeUI).GetProperty(columnName)?.GetValue(this) ?? string.Empty).Length;
+                var valueLength = ((string?)typeof(EmployeeUI).GetProperty(columnName)?.GetValue(this)?.ToString() ?? string.Empty).Length;
                 switch (columnName)
                 {
                     case nameof(FirstName):
                     case nameof(MiddleName):
                     case nameof(LastName):
-                        return (valueLength > 50 || valueLength < 2) ? $"Поле {(string?)typeof(EmployeeUI).GetProperty(columnName)?.ToString()} должно содержать от 2 до 50 символов" : string.Empty ;
+                        return (valueLength > 30 || valueLength < 2) ? $"Поле {(string?)typeof(EmployeeUI).GetProperty(columnName)?.ToString()} должно содержать от 2 до 30 символов" : string.Empty;
+
                     case nameof(BirthDate):
-                        return (BirthDate > DateTime.Now.AddYears(-120) || BirthDate < DateTime.Now.AddYears(-18)) ? "Дата рождения установлена неправильно. Сотрруднику должно быть от 18 до 120 лет" : string.Empty;
+                        return (BirthDate < DateTime.Now.AddYears(-100) || BirthDate > DateTime.Now.AddYears(-18)) ? "Дата рождения установлена неправильно. Сотрудник должен быть в возрасте от 18 до 100 лет" : string.Empty;
                 }
                 return string.Empty;
             }
         }
 
-        public string Error { get; }
+        public string Error { get; } = String.Empty;
     }
 }

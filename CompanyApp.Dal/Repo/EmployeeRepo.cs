@@ -3,11 +3,6 @@ using CompanyApp.Dal.Repo.Base;
 using CompanyApp.Dal.Repo.Interfaces;
 using CompanyApp.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompanyApp.Dal.Repo
 {
@@ -84,6 +79,25 @@ namespace CompanyApp.Dal.Repo
             else
             {
                 return 0;
+            }
+
+            return persist ? SaveChanges() : 0;
+        }
+
+        public int AddNewEmployeeAsDepartmentDirector(Employee employee, bool persist = true)
+        {
+            var currentDirectors = Table.Where(e => e.DepartmentId == employee.DepartmentId && e.IsDirector);
+
+            employee.IsDirector = true;
+            Update(employee, false);
+
+            if (currentDirectors is not null)
+            {
+                foreach (var currentDirector in currentDirectors)
+                {
+                    currentDirector.IsDirector = false;
+                    Update(currentDirector, false);
+                }
             }
 
             return persist ? SaveChanges() : 0;

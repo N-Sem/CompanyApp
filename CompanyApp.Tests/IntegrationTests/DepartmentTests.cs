@@ -1,11 +1,6 @@
 ﻿using CompanyApp.Dal.Repo.Interfaces;
 using CompanyApp.Dal.Repo;
 using CompanyApp.Tests.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompanyApp.Tests.IntegrationTests
 {

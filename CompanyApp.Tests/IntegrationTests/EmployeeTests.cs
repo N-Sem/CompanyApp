@@ -2,7 +2,6 @@
 using CompanyApp.Dal.Repo.Interfaces;
 using CompanyApp.Models.Entities;
 using CompanyApp.Tests.Base;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CompanyApp.Tests.IntegrationTests
 {
@@ -24,7 +23,8 @@ namespace CompanyApp.Tests.IntegrationTests
                     FirstName = "NewFirstName",
                     MiddleName = "NewMiddleName",
                     LastName = "NewLastName",
-                    BirthDate = DateTime.Now
+                    BirthDate = DateTime.Now,
+                    Gender = Enums.Gender.М
                 };
                 repo.Add(entity);
 
@@ -44,13 +44,40 @@ namespace CompanyApp.Tests.IntegrationTests
             {
                 var entitiesToAdd = new List<Employee>()
                 {
-                    new() { FirstName = "First_FirstName", MiddleName = "First_MiddleName", LastName = "First_LastName", BirthDate = DateTime.Now },
-                    new() { FirstName = "Second_FirstName", MiddleName = "Second_MiddleName", LastName = "Second_LastName", BirthDate = DateTime.Now },
-                    new() { FirstName = "Third_FirstName", MiddleName = "Third_MiddleName", LastName = "Third_LastName", BirthDate = DateTime.Now }
+                    new() { FirstName = "First_FirstName", MiddleName = "First_MiddleName", LastName = "First_LastName", BirthDate = DateTime.Now, Gender = Enums.Gender.М },
+                    new() { FirstName = "Second_FirstName", MiddleName = "Second_MiddleName", LastName = "Second_LastName", BirthDate = DateTime.Now, Gender = Enums.Gender.М },
+                    new() { FirstName = "Third_FirstName", MiddleName = "Third_MiddleName", LastName = "Third_LastName", BirthDate = DateTime.Now, Gender = Enums.Gender.М }
                 };
                 repo.AddRange(entitiesToAdd, true);
 
                 Assert.Equal(itemsCount + 3, Context.Employees.Count());
+            }
+            repo.Dispose();
+        }
+
+        [Fact]
+        public void CanAddNewEmployeeAsDepartmentDirector()
+        {
+            IEmployeeRepo repo = new EmployeeRepo(this.Context);
+
+            ExecuteInATransaction(RunTheTest);
+
+            void RunTheTest()
+            {
+                var entity = new Employee
+                {
+                    FirstName = "NewFirstName",
+                    MiddleName = "NewMiddleName",
+                    LastName = "NewLastName",
+                    BirthDate = DateTime.Now,
+                    DepartmentId = 1,
+                    Gender = Enums.Gender.М
+                };
+                repo.AddNewEmployeeAsDepartmentDirector(entity);
+
+                Assert.Equal(itemsCount + 1, Context.Employees.Count());
+                Assert.Equal("NewFirstName", Context.Employees.Where(e => e.DepartmentId == 1 && e.IsDirector).Single().FirstName);
+
             }
             repo.Dispose();
         }

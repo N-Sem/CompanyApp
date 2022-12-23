@@ -60,7 +60,7 @@ namespace CompanyApp.Dal.EfStructures.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<byte?>("Gender")
+                    b.Property<byte>("Gender")
                         .HasColumnType("tinyint unsigned");
 
                     b.Property<bool>("IsDeleted")

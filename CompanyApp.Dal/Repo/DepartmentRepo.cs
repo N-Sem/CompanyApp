@@ -3,11 +3,6 @@ using CompanyApp.Dal.Repo.Base;
 using CompanyApp.Dal.Repo.Interfaces;
 using CompanyApp.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompanyApp.Dal.Repo
 {
@@ -25,7 +20,8 @@ namespace CompanyApp.Dal.Repo
             .Employees;
 
         public Employee? GetDepartmentDirector(int departmentId) =>
-            (Table.Where(d => d.Id == departmentId).Include(d => d.Employees).FirstOrDefault() ?? new())
+            (Table
+            .AsNoTrackingWithIdentityResolution().Where(d => d.Id == departmentId).Include(d => d.Employees).FirstOrDefault() ?? new())
             .Employees
             .Where(e => e.IsDirector)
             .FirstOrDefault();

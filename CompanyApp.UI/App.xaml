@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CompanyApp.UI"
              xmlns:vms="clr-namespace:CompanyApp.UI.ViewModels"
-             StartupUri="Pages/EmployeesWindow.xaml">
+             StartupUri="Pages/MainWindow.xaml">
     <Application.Resources>
         <vms:ViewModelsLocator x:Key="VMS" />
     </Application.Resources>

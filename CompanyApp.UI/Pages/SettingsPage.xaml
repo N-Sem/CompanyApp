@@ -1,0 +1,62 @@
+﻿<Page x:Class="CompanyApp.UI.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CompanyApp.UI.Pages"
+      mc:Ignorable="d" FontSize="16" 
+      d:DesignHeight="400" d:DesignWidth="1200"
+      Title="SettingsPage">
+    
+    <Page.DataContext>
+        <Binding Path="SettingsPageViewModel" Source="{StaticResource VMS}"/>
+    </Page.DataContext>
+    <StackPanel Name="MainPanel" Orientation="Vertical">
+        <TextBlock Text="{Binding Title}" FontWeight="Bold" VerticalAlignment="Center" Margin="10" />
+
+        <Grid Name="PropertiesGrid" Height="auto" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" x:Name="ConnString" Text="Строка подключения" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBox x:Name="tbConnString" Text="{Binding ConnectionString, UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Height="30" />
+        </Grid>
+
+        <GroupBox Margin="10">
+            <Grid Height="280">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="900" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Тест подключения к базе данных с использованием введенной строки подключения." VerticalAlignment="Center" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="Сохранение строки подключения. &#x0a;Для подключения к базе данных и получения данных основных вкладок (сотрудники, отделы, заказы) с использованием &#x0a;введенной строки подключения, после сохранения необходимо перезапустить программу." VerticalAlignment="Center"  />
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="Создать/пересоздать базу данных (используется введенная строка подключения). &#x0a;Внимание! Все имеющиеся данные в таблицих будут удалены!" VerticalAlignment="Center"  />
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="Создать/пересоздать базу данных и заполнить тестовыми данными (используется введенная строка подключения). &#x0a;Внимание! Все имеющиеся данные в таблицих будут удалены!" VerticalAlignment="Center"  />
+
+                <Button Grid.Row="0" Grid.Column="0"  x:Name="buttonTest" Content="Тест соединения с БД" Command="{Binding CheckConnectionStringCommand}" Width="200" Height="40" Margin="10"/>
+                <Button Grid.Row="1" Grid.Column="0"  x:Name="buttonSave" Content="Сохранить строку" Command="{Binding SaveConnectionStringCommand}" Width="200" Height="40" Margin="10"/>
+
+                <Button Grid.Row="2" Grid.Column="0"  x:Name="buttonCreateDb" Content="Создать базу данных" Command="{Binding CreateDatabaseAndAddTables}" Width="200" Height="40" Margin="10"/>
+                <Button Grid.Row="3" Grid.Column="0"  x:Name="buttonAddSeedData" Content="Записать тестовые данные" Command="{Binding AddSeedDataCommand}" Width="200" Height="40" Margin="10"/>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Name="ConnStringButtons" Orientation="Horizontal">
+        </StackPanel>
+
+        <StackPanel Name="DbUpdateButtons" Orientation="Horizontal">
+        </StackPanel>
+
+    </StackPanel>
+</Page>

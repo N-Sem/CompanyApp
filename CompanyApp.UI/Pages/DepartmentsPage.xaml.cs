@@ -1,7 +1,4 @@
-﻿using CompanyApp.Dal.Repo;
-using CompanyApp.Dal.Repo.Interfaces;
-using CompanyApp.UI.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CompanyApp.UI.Pages
 {
     /// <summary>
-    /// Interaction logic for EmployeesWindow.xaml
+    /// Interaction logic for DepartmentsPage.xaml
     /// </summary>
-    public partial class EmployeesWindow : Window
+    public partial class DepartmentsPage : Page
     {
-        public EmployeesWindow()
+        public DepartmentsPage()
         {
             InitializeComponent();
         }

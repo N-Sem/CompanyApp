@@ -21,14 +21,13 @@ namespace CompanyApp.UI.Models.Base
             }
             return _errors.ContainsKey(propertyName) ? _errors[propertyName] : null;
         }
-
+        
         public bool HasErrors => _errors.Any();
 
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
         internal void OnErrorChanged(string propertyName)
         {
-
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 

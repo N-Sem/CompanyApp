@@ -3,14 +3,6 @@ using CompanyApp.Models.Base;
 using CompanyApp.Models.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CompanyApp.Dal.Initialization
 {

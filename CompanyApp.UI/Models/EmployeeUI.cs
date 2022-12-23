@@ -1,18 +1,17 @@
 ﻿using CompanyApp.Enums;
 using CompanyApp.Models.Entities;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using static CompanyApp.UI.Models.CustomAttributes.DataRangeAttribute;
 
 namespace CompanyApp.UI.Models
 {
     public partial class EmployeeUI : INotifyPropertyChanged
     {
+        public string FullName => $"{FirstName} {MiddleName} {LastName}";
 
         #region Id
         private int? _id;
@@ -37,8 +36,8 @@ namespace CompanyApp.UI.Models
         /// <summary>
         /// Имя сотрудника
         /// </summary>        
-        [Required]
-        [StringLength(50, MinimumLength = 2)]
+        [Required(ErrorMessage = "Необходимо указать имя сотрудника")]
+        [StringLength(30, MinimumLength = 2, ErrorMessage ="Имя должно содержать от 2 до 30 символов")]
         public string? FirstName
         {
             get { return _firstName; }
@@ -57,8 +56,8 @@ namespace CompanyApp.UI.Models
         /// <summary>
         /// Отчество сотрудника
         /// </summary>
-        [Required]
-        [StringLength(50, MinimumLength = 2)]
+        [Required(ErrorMessage = "Необходимо указать отчество сотрудника")]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "Отчество должно содержать от 2 до 30 символов")]
         public string? MiddleName
         {
             get { return _middleName; }
@@ -77,8 +76,8 @@ namespace CompanyApp.UI.Models
         /// <summary>
         /// Фамилия сотрудника
         /// </summary>
-        [Required]
-        [StringLength(50, MinimumLength = 2)]
+        [Required(ErrorMessage = "Необходимо указать фамилию сотрудника")]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "Фамилия должно содержать от 2 до 30 символов")]
         public string? LastName
         {
             get { return _lastName; }
@@ -97,7 +96,8 @@ namespace CompanyApp.UI.Models
         /// <summary>
         /// Дата рождения сотрудника
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Необходимо указать дату рождения сотрудника")]
+        [DateRangeAttribute(minAge:18, maxAge:100, ErrorMessage = "Сотрудник должен быть в возрасте от 18 до 100 лет")]
         public DateTime? BirthDate
         {
             get { return _birthDate; }
@@ -116,7 +116,8 @@ namespace CompanyApp.UI.Models
         /// <summary>
         /// Пол сотрудника
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Необходимо указать пол сотрудника")]
+        [Range(1,2, ErrorMessage ="Пол сотрудника указан неверно")]
         public Gender? Gender
         {
             get { return _gender; }
@@ -135,7 +136,8 @@ namespace CompanyApp.UI.Models
         /// <summary>
         /// Id отдела, в корором работает сотрудник
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Необходимо указать отдела, в котором работает сотрудник")]
+        [Range(1, 1000, ErrorMessage ="Наименование департамента указано неверно")]
         public int? DepartmentId
         {
             get { return _departmentId; }
@@ -168,11 +170,11 @@ namespace CompanyApp.UI.Models
         #endregion
 
         #region Orders
-        private List<Order> _orders = new List<Order>();
+        private ObservableCollection<Order> _orders = new ObservableCollection<Order>();
         /// <summary>
         /// Список заказов сотрудника
         /// </summary>
-        public List<Order> Orders
+        public ObservableCollection<Order> Orders
         {
             get { return _orders; }
             set
@@ -186,15 +188,14 @@ namespace CompanyApp.UI.Models
         #endregion
 
         #region IsChanged
-        private bool _isChanged;
+        private bool _isChanged = false;
         public bool IsChanged
         {
             get => _isChanged;
             set
             {
-                if (value == _isChanged)
-                    return;
-                OnPropertyChanged();
+                if (value == _isChanged) return;
+                _isChanged = value;
             }
         }
         #endregion

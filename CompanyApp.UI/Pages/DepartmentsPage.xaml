@@ -1,0 +1,54 @@
+﻿<Page x:Class="CompanyApp.UI.Pages.DepartmentsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CompanyApp.UI.Pages"
+        xmlns:vms="clr-namespace:CompanyApp.UI.ViewModels"
+        xmlns:cmds="clr-namespace:CompanyApp.UI.Commands"
+        DataContext="{Binding DepartmentsPageViewModel, Source={StaticResource VMS}}"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="1200"
+      Title="DepartmentsPage">
+
+    <Grid x:Name="EntitiesGrid">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Content="{Binding Title}" FontSize="16" FontWeight="Bold" />
+
+        <DataGrid x:Name="ItemsGrig" ItemsSource="{Binding Path=Departments}" AutoGenerateColumns="False" IsReadOnly="True" Grid.Row="1" FontSize="16" Margin="0" Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Path=Id}" Width="50" />
+                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Название отдела" Width="250" />
+                <DataGridTextColumn Binding="{Binding Path=DirectorName}" Header="Руководитель отдела" Width="250" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Button x:Name="btnEditEntity" Content="Редактировать запись" FontSize="16" 
+                        Margin="5" Width="200"
+                        Command="{Binding Path=DataContext.EditEntityCommand,
+                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding ElementName=ItemsGrig, Path=SelectedItem.Id}"/>
+
+
+            <Button x:Name="btnAddEntity" Content="Новая запись" FontSize="16" 
+                        Margin="5" Width="200"
+                        Command="{Binding Path=DataContext.NewEntityCommand,
+                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding ElementName=ItemsGrig, Path=SelectedItem}"/>
+
+            <Button x:Name="btnUpdateGrid" Content="Обновить таблицу" FontSize="16" 
+                        Margin="5" Width="200"
+                        Command="{Binding Path=DataContext.UpdateListBox,
+                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Page}}}"
+                        CommandParameter="{Binding ElementName=ItemsGrig, Path=SelectedItem}"/>
+        </StackPanel>
+
+    </Grid>
+</Page>

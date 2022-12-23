@@ -1,14 +1,14 @@
-﻿<Window x:Class="CompanyApp.UI.Pages.EditEmployeeWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CompanyApp.UI.Pages"
         xmlns:vms="clr-namespace:CompanyApp.UI.ViewModels"
-        DataContext="{Binding EditEmployeeWindowViewModel, Source={StaticResource VMS}}"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime" x:Class="CompanyApp.UI.Pages.EditEmployeeWindow"
         mc:Ignorable="d"
         FontSize="16"
-        Title="Title" Height="800" Width="450">
+        Title="{Binding WindowTitle}" Height="650" Width="600">
     <Window.Resources>
         <Style TargetType="{x:Type TextBox}">
             <Style.Triggers>
@@ -18,80 +18,93 @@
                     <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
                 </Trigger>
             </Style.Triggers>
-            <Setter Property="Validation.ErrorTemplate">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <DockPanel LastChildFill="True">
-                            <TextBlock Foreground="Red" FontSize="20" Text="!"
-                                       ToolTip="{Binding ElementName=controlWithError, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
-                            <Border BorderBrush="Red" BorderThickness="1">
-                                <AdornedElementPlaceholder Name="controlWithError"/>
-                            </Border>
-                        </DockPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type DatePicker}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid x:Name="PropertiesGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="180" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60" />
-            <RowDefinition Height="60"  />
-            <RowDefinition Height="60"  />
-            <RowDefinition Height="60"  />
-            <RowDefinition  Height="80" />
-            <RowDefinition  Height="40" />
-            <RowDefinition  Height="40" />
-            <RowDefinition  Height="40" />
-            <RowDefinition  Height="140" />
-            <RowDefinition  Height="60" />
-            <RowDefinition  Height="60" />
-            <RowDefinition  Height="60" />
-        </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Column="0" Grid.Row="0" x:Name="Id" Text="Id" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <TextBox x:Name="tbId" TextWrapping="Wrap" Text="{Binding Path=EmployeeUI.Id}"  Margin="10" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" />
+    <Window.DataContext>
+        <Binding Path="EditEmployeeWindowViewModel" Source="{StaticResource VMS}"/>
+    </Window.DataContext>
+    <StackPanel Name="MainPanel" Orientation="Vertical">
 
-        <TextBlock Grid.Column="0" Grid.Row="1" x:Name="FirstName" Text="Имя" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <TextBox x:Name="tbFirstName" TextWrapping="Wrap" Text="{Binding Path=EmployeeUI.FirstName, ValidatesOnDataErrors=True}" Margin="10" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" />
+        <Grid Name="PropertiesGrid" Height="460" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40"  />
+                <RowDefinition Height="40"  />
+                <RowDefinition Height="40"  />
+                <RowDefinition  Height="40" />
+                <RowDefinition  Height="40" />
+                <RowDefinition  Height="40" />
+                <RowDefinition  Height="40" />
+                <RowDefinition  Height="140" />
+            </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="2" x:Name="MiddleName" Text="Отчество" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <TextBox x:Name="tbMiddleName" TextWrapping="Wrap" Text="{Binding Path=EmployeeUI.MiddleName}" Margin="10" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Grid.Row="0" x:Name="Id" Text="Id" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBox x:Name="tbId" TextWrapping="Wrap" Text="{Binding EmployeeUI.Id}"  Margin="5" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Height="30" IsReadOnly="True" />
 
-        <TextBlock Grid.Column="0" Grid.Row="3" x:Name="LastName" Text="Фамилия" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <TextBox x:Name="tbLastName" TextWrapping="Wrap" Text="{Binding Path=EmployeeUI.LastName}"  Margin="10" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="FirstName" Text="Имя" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBox x:Name="tbFirstName" TextWrapping="Wrap" Text="{Binding EmployeeUI.FirstName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="30"  />
 
-        <TextBlock Grid.Column="0" Grid.Row="4" x:Name="BirthDate" Text="Дата рождения" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <DatePicker x:Name="datePicker" Grid.Column="1" SelectedDate="{Binding Path=EmployeeUI.BirthDate}" HorizontalAlignment="Left" Margin="10" Grid.Row="4" VerticalAlignment="Top" Height="50" Width="200"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" x:Name="MiddleName" Text="Отчество" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBox x:Name="tbMiddleName" TextWrapping="Wrap" Text="{Binding EmployeeUI.MiddleName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="30" />
 
-        <TextBlock Grid.Column="0" Grid.Row="5" x:Name="Gender" Text="Пол" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <TextBox x:Name="tbGender" TextWrapping="Wrap" Text="{Binding Path=EmployeeUI.Gender}"  Margin="10" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Grid.Row="3" x:Name="LastName" Text="Фамилия" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBox x:Name="tbLastName" TextWrapping="Wrap" Text="{Binding EmployeeUI.LastName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"  Margin="5" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Height="30" />
 
-        <TextBlock Grid.Column="0" Grid.Row="6" x:Name="DeptId" Text="Департамент" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <TextBox x:Name="tbDept" TextWrapping="Wrap" Text="{Binding Path=EmployeeUI.DepartmentId}"  Margin="10" Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Grid.Row="4" x:Name="BirthDate" Text="Дата рождения" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <DatePicker x:Name="datePicker" Grid.Column="1" SelectedDate="{Binding EmployeeUI.BirthDate, ValidatesOnDataErrors=True}" HorizontalAlignment="Left" Margin="5" Grid.Row="4" VerticalAlignment="Top" Height="30" />
 
-        <TextBlock Grid.Column="0" Grid.Row="7" x:Name="IsDirector" Text="Является директором" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <CheckBox IsChecked="{Binding Path=EmployeeUI.IsDirector}" Margin="10" Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Grid.Row="5" x:Name="Gender" Text="Пол" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="1" >
+                <TextBox x:Name="tbGender" TextWrapping="Wrap" Text="{Binding EmployeeUI.Gender, ValidatesOnDataErrors=True}"  Margin="5" Grid.Row="3" VerticalAlignment="Center" Height="30" Width="200" IsReadOnly="True" />
+                <ComboBox x:Name="cbGender" Margin="5" ItemsSource="{Binding GenderValues}" SelectedValue="{Binding EmployeeUI.Gender}" Width="175" />
+            </StackPanel>
 
-        <TextBlock Grid.Column="0" Grid.Row="8" x:Name="Orders" Text="Заказы сотрудника" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
-        <ListBox x:Name="listBox" Grid.Column="1" Grid.Row="8" d:ItemsSource="{Binding Path=EmployeeUI.Orders}"/>
+            <TextBlock Grid.Column="0" Grid.Row="6" x:Name="DeptId" Text="Отдел" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <ComboBox x:Name="cbDepartments" Grid.Row="6" Grid.Column="1" Margin="5" ItemsSource="{Binding AllDepartments, ValidatesOnDataErrors=True}" SelectedValue="{Binding EmployeeUI.DepartmentId}" DisplayMemberPath="Name" SelectedItem="Id" SelectedValuePath="Id" Height="30" />
 
-        <Button x:Name="buttonSave" Command="{Binding Path=DataContext.SaveEmployeeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
-                Content="Сохранить" Margin="10" Grid.Column="0" Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <Button x:Name="buttonCancel" Content="Отменить" Margin="30 10 10 10" Grid.Column="1" Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Column="0" Grid.Row="7" x:Name="IsDirector" Text="Является директором" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <CheckBox IsChecked="{Binding EmployeeUI.IsDirector}" Margin="10" Grid.Column="1" Grid.Row="7" VerticalAlignment="Center" />
 
-        <ListBox Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="6"
-                     ItemsSource="{Binding ElementName=DetatilsGrid, Path=(Validation.Errors)}" Margin="0,15,0,0" Grid.RowSpan="2">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <ListBox ItemsSource="{Binding Path=ErrorContent}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            <TextBlock Grid.Column="0" Grid.Row="8" x:Name="Orders" Text="Заказы сотрудника" FontSize="16" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <ListBox x:Name="listBox" Grid.Column="1" Grid.Row="8" Margin="5" ItemsSource="{Binding EmployeeUI.Orders}" DisplayMemberPath="Name" />
+        </Grid>
 
-    </Grid>
+        <GroupBox Margin="5" Header="Добавить заказ">
+            <Grid Name="AddOrderGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+                <ComboBox x:Name="cbAllOrders" Grid.Row="0" HorizontalAlignment="Left" Margin="5" Width="250" Height="30" ItemsSource="{Binding AllOrders}" DisplayMemberPath="Name" SelectedItem="Id" SelectedValuePath="Id" />
+                <Button x:Name="buttonAddOrder" Grid.Row="0" Content="Добавить заказ" HorizontalAlignment="left" Margin="260 5 5 5" Width="150" Height="30" Command="{Binding AddOrderCommand}" CommandParameter="{Binding ElementName=cbAllOrders, Path=SelectedItem}" />
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Name="Buttons" Orientation="Horizontal">
+            <Button x:Name="buttonSave" Command="{Binding DataContext.SaveEmployeeCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}, Mode=FindAncestor}}" 
+            Content="Сохранить" Width="120" Height="40" Margin="5 5 5 5"/>
+            <Button x:Name="buttonCancel" Content="Отменить" Command="{Binding CloseWindowCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Width="120" Height="40" Margin="5 5 5 5"/>
+        </StackPanel>
+
+    </StackPanel>
+
 </Window>
